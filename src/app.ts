@@ -6,12 +6,26 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 
 const app = express();
+app.set("trust proxy", true);
+
+const keyGenerator = function keyGenerator(
+  request: Request,
+  _response: Response
+): string {
+  if (!request.ip) {
+    console.error("Warning: request.ip is missing!");
+    return request.socket.remoteAddress!!;
+  }
+
+  return request.ip.replace(/:\d+[^:]*$/, "");
+};
 
 const rateLimitConfig = rateLimit({
   windowMs: 20 * 1000,
   limit: 15,
   legacyHeaders: true,
   standardHeaders: "draft-7",
+  keyGenerator,
 });
 
 app.use(rateLimitConfig);
