@@ -5,6 +5,9 @@ import cookieparser from "cookie-parser";
 import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 
+import routes from "./routes/route";
+import { notFoundMiddleware } from "./middleware/not-found";
+
 const app = express();
 app.set("trust proxy", true);
 
@@ -39,15 +42,18 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("tiny"));
 
+// root route
+app.get("/", async (_req, res) => {
+  res.json({
+    message: "Hello World!",
+    NODE_ENV: process.env.NODE_ENV,
+  });
+});
 // Apply routes before error handling
-// app.use("/v1", root);
+app.use("/v1", routes);
 
 // Apply error handling last
-// app.use(fourOhFour);
+app.use(notFoundMiddleware);
 // app.use(errorHandler);
-
-app.get("/akun", (req: Request, res: Response) => {
-  res.status(200).json({ message: "Hello World!" });
-});
 
 export default app;
