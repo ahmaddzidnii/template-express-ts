@@ -50,6 +50,7 @@
 3. [@types/cors](https://expressjs.com/)
 4. [@types/express](https://expressjs.com/)
 5. [@types/morgan](https://expressjs.com/)
+6. [nodemon](https://expressjs.com/)
 
 ## Made by ahmaddzidnii
 
