@@ -46,7 +46,6 @@ app.use(morgan("tiny"));
 // root route
 app.get("/", async (_req, res, next) => {
   try {
-    throw new Error("Hello World!");
     res.json({
       message: "Hello World!",
       NODE_ENV: process.env.NODE_ENV,
