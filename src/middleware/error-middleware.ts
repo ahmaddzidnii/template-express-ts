@@ -21,7 +21,9 @@ export const errorMiddleware = async (
     .status(500)
     .json({
       message:
-        process.env.NODE_ENV === "PROD" ? "Internal server error" : `${err}`,
+        process.env.NODE_ENV === "production"
+          ? "Internal server error"
+          : `${err}`,
     })
     .end();
 };
