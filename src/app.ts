@@ -7,6 +7,7 @@ import { rateLimit } from "express-rate-limit";
 
 import routes from "./routes/route";
 import { notFoundMiddleware } from "./middleware/not-found";
+import { errorMiddleware } from "./middleware/error-middleware";
 
 const app = express();
 app.set("trust proxy", true);
@@ -43,17 +44,22 @@ app.use(helmet());
 app.use(morgan("tiny"));
 
 // root route
-app.get("/", async (_req, res) => {
-  res.json({
-    message: "Hello World!",
-    NODE_ENV: process.env.NODE_ENV,
-  });
+app.get("/", async (_req, res, next) => {
+  try {
+    throw new Error("Hello World!");
+    res.json({
+      message: "Hello World!",
+      NODE_ENV: process.env.NODE_ENV,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 // Apply routes before error handling
 app.use("/v1", routes);
 
 // Apply error handling last
 app.use(notFoundMiddleware);
-// app.use(errorHandler);
+app.use(errorMiddleware);
 
 export default app;
